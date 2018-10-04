@@ -1,5 +1,6 @@
 /********************************************************************/
 PROJECT 1
+https://amfueger.github.io/p1-v2/
 /********************************************************************/
 
 Proposal and Description: Make a two player game known as Onitama. Onitama is a board game with pawns whose movements on a board are dictated by information contained on cards in the player's hand. Each player has five pawns, one on which the victory condition hinges, and at all times has a hand of two cards, played face up. In game play, there are five cards available to play drawn out of a 16 card deck, with a player's turn resulting in their discarding the used card after action and picking up the spare card off to the side (ie: the spare card is, after the first player's first turn, the discard of whoever played the previous turn. Each player has two cards, with two players, that's four cards total in play). One movement, based on card information, is allowed per turn before turn passes to the other player. There are two victory conditions; the special pawn moves to a specific location on the board, or, in the way of checkers/chess, the loss of your special pawn or loss of your opponents results in a victory condition. Board is 5 x 5 squares with pawns starting at opposite ends of the opponent in a line. 

@@ -282,12 +282,7 @@ class Game {
 				//true is victory!
 				return true;
 				//stream
-			} else if ($('.square').data('x') === 3 && $('.square').data('y') === 5 && $('.square').children().hasClass('red-pawn-3')) {
-				//What I think the above says is that if a square class's data of x and y are equal to certain numbers AND a child element of a square contains a class of red-pawn-3, then victory occurs. 
-
-				//(the div container with x = 3 and y = 5 contains img red-pawn-3)
-				//(this.redPawns[2].x === 3 && this.redPawns[2].y === 5) <- since I didn't use the pawn class.... 
-				//true for victory!
+			} else if ($('#3').attr('id', 'red-pawn-3')) {
 				return true;
 			}
 			console.log("Red hasn't won yet, victory checked");
@@ -354,29 +349,19 @@ class Game {
 	removeOpponentPawn() {
 		//TWO WAYS I can do this. 
 		//1. On player turn, any pawns with the class that's NOT the player's get removed. 
-		//If it's red's turn, and....
-
-		for(let i = 0; i <= 25; i++){
-			$('#i').each(function(){ 
-				$('.square').children().remove($('.blue-pawn')
-				});
-
-			}
-		}
+		//If it's red's turn, and.... 
 		if (this.whoseTurn === "red") {
-			//target square contains blue pawn, remove it!
-			//NEED IF STATEMENT TO CHECK IF BLUE PAWN IS THERE BEFORE REMOVAL
-			if ($('.square').children().hasClass('red-pawn') && $('.square').children().hasClass('blue-pawn')) {
-				console.log("Is this what's happening?");
-				$('.square').children().remove($('.blue-pawn'));
+			for(let i = 0; i <= 25; i++){
+				if($('#' + i ).children().hasClass('current-pawn') && $('#' + i ).children().hasClass('blue-pawn') === true){ 
+					$('#' + i).children('img.blue-pawn').remove()
+				};
 			}
 		}
-		//If it's blue's turn, and....
 		if (this.whoseTurn === "blue") {
-			//REPEAT DOWN BELOW
-			//target square contains red pawn, remove it!
-			if ($('.square').children().hasClass('red-pawn') && $('.square').children().hasClass('blue-pawn')) {
-				$('.square').children().remove($('.red-pawn'));
+			for(let i = 0; i <= 25; i++){
+				if($('#' + i ).children().hasClass('current-pawn') && $('#' + i ).children().hasClass('red-pawn') === true){ 
+					$('#' + i).children('img.red-pawn').remove()
+				};
 			}
 		}
 	}
@@ -436,6 +421,8 @@ class Game {
 			this.newPawnPositionX = null;
 			$('.turn-text').empty();
 			$('.turn-text').text('It is Blues turn!')
+			$('.square').removeClass('current-pawn-container');
+			$('img').removeClass('current-pawn');
 
 		} else if (this.whoseTurn === "blue") {
 			this.whoseTurn = "red";
@@ -449,6 +436,8 @@ class Game {
 			this.newPawnPositionX = null;
 			$('.turn-text').empty();
 			$('.turn-text').text('It is Reds turn!')
+			$('.square').removeClass('current-pawn-container');
+			$('img').removeClass('current-pawn');
 		}
 		this.waitingForPawn = true;
 	}
@@ -565,8 +554,6 @@ class Game {
 				let currentPawnImage = this.currentPawn.detach();
 				$(e.target).append(currentPawnImage);
 				this.removeOpponentPawn(); 
-				$('div').remove($('.current-pawn-container'));
-				$('img').removeClass('current-pawn');
 			}
 			this.waitingForSquare = false;
 			this.victoryBlue();
@@ -579,8 +566,6 @@ class Game {
 				let currentPawnImage = this.currentPawn.detach();
 				$(e.target).append(currentPawnImage);
 			this.removeOpponentPawn();
-				$('div').remove($('.current-pawn-container'));
-				$('img').removeClass('current-pawn')
 			}
 			this.waitingForSquare = false;
 			this.victoryBlue();
