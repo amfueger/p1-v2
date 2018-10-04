@@ -420,6 +420,9 @@ class Game {
 			this.cardClickedIndex = null;
 			this.newPawnPositionY = null;
 			this.newPawnPositionX = null;
+			$('.turn-text').empty();
+			$('.turn-text').text('It is Blues turn!')
+
 		} else if (this.whoseTurn === "blue") {
 			this.whoseTurn = "red";
 			this.clickedPawnX = null;
@@ -430,6 +433,8 @@ class Game {
 			this.cardClickedIndex = null;
 			this.newPawnPositionY = null;
 			this.newPawnPositionX = null;
+			$('.turn-text').empty();
+			$('.turn-text').text('It is Reds turn!')
 		}
 	}
 	selectCurrentCard(e) {
@@ -485,6 +490,7 @@ class Game {
 		let tempNewPawnPositionY = null;
 		let tempNewPawnPositionX = null;
 		if (this.whoseTurn === "red") {
+
 			for (let i = 0; i < this.cardClicked.moves.length; i++) {
 				//	console.log(this.cardClicked.moves[0].y + " testing card clicked move 1 y number");
 				//console.log(this.cardClicked.moves[i].y + " testing card clicked with i number");
@@ -541,9 +547,11 @@ class Game {
 				this.newPawnPositionX = $(e.target).data('x')
 				let currentPawnImage = this.currentPawn.detach();
 				$(e.target).append(currentPawnImage);
+				this.removeOpponentPawn(e);
 				$('div').remove($('.current-pawn-container'));
 				$('img').removeClass('current-pawn');
 			}
+
 			this.victoryBlue();
 			this.victoryRed()
 			this.switchCards();
@@ -553,6 +561,7 @@ class Game {
 				this.newPawnPositionX = $(e.target).data('x')
 				let currentPawnImage = this.currentPawn.detach();
 				$(e.target).append(currentPawnImage);
+				this.removeOpponentPawn(e);
 				$('div').remove($('.current-pawn-container'));
 				$('img').removeClass('current-pawn')
 			}
@@ -576,4 +585,7 @@ $('.square').on('click', (e) => {
 	if (game.waitingforSquare === true) {
 		game.movePawn(e);
 	}
+})
+$('.pass').on('click', (e) => {
+	game.switchToOtherPlayer();
 })

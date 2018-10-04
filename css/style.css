@@ -25,9 +25,9 @@
 p {
 	font-size: 16px;
 	margin: 10px;
-	font-size: x-large;
+	font-size: xx-large;
 	font-family: 'Roboto', sans-serif;
-	color: lightgrey;
+	color: blue;
 	text-shadow: 2px 2px black;
 	padding: 5px;
 }
@@ -142,6 +142,22 @@ h2 {
 	width: 350px;
 	margin: 20px;
 }
+.blue-card-position {
+	transform: rotate(180deg);
+}
+.button {
+	font-family: 'Roboto', sans-serif;
 
+
+
+}
+button {
+	padding: 20px;
+    font-size: 30px;
+    margin: 0 auto;
+    background-color: tomato;
+    border-radius: 20px;
+    width: -webkit-fill-available;
+}
 
 
