@@ -283,12 +283,14 @@ class Game {
 				return true;
 				//stream
 			} else if ($('.square').data('x') === 3 && $('.square').data('y') === 5 && $('.square').children().hasClass('red-pawn-3')) {
+				//What I think the above says is that if a square class's data of x and y are equal to certain numbers AND a child element of a square contains a class of red-pawn-3, then victory occurs. 
+
 				//(the div container with x = 3 and y = 5 contains img red-pawn-3)
 				//(this.redPawns[2].x === 3 && this.redPawns[2].y === 5) <- since I didn't use the pawn class.... 
 				//true for victory!
 				return true;
 			}
-			//no one has won yet!
+			console.log("Red hasn't won yet, victory checked");
 			return false;
 		}
 	}
@@ -307,7 +309,7 @@ class Game {
 				return true;
 			}
 			//no one has won yet!
-			console.log("No one has won yet!");
+			console.log("Blue hasn't won yet, victory checked");
 			return false;
 		}
 	}
@@ -357,6 +359,7 @@ class Game {
 			//target square contains blue pawn, remove it!
 			//NEED IF STATEMENT TO CHECK IF BLUE PAWN IS THERE BEFORE REMOVAL
 			if ($(e.target).children().hasClass('blue-pawn')) {
+				console.log("Is this what's happening?");
 				$(e.target).remove($('.blue-pawn'));
 			}
 		}
@@ -364,7 +367,7 @@ class Game {
 		if (this.whoseTurn === "blue") {
 			//REPEAT DOWN BELOW
 			//target square contains red pawn, remove it!
-			if ($(e.target.children().hasClass('red-pawn'))) {
+			if ($(e.target).children().hasClass('red-pawn')) {
 				$(e.target).remove($('.red-pawn'));
 			}
 		}
@@ -372,17 +375,20 @@ class Game {
 	checkIfPawnOfColorIsThere(e) {
 		if (this.whoseTurn === "red") {
 			//for (let i = 0; i <= this.redPawns.length; i++) {
-			if ($('.square').hasClass('.red-pawn') && $('.square').data('x') === $(e.target).data('x') && $('.square').data('y') === $(e.target).data('y')) {
+			if ($('.square').children().hasClass('.red-pawn') && $('.square').data('x') === $(e.target).data('x') && $('.square').data('y') === $(e.target).data('y')) {
 				//true means that one of your pawns is there already
 				//(this.redPawns[i] === $(e.target).data('x') && this.redPawns[i] === $(e.target).data('y')) <,-- didn't use pawn array..... 
 				//if an img with class red-pawn is in the target x and y (
+				//RE-SET SQUARE CLICK
+				this.waitingforSquare = false;
 				return true;
 			}
 		} else if (this.whoseTurn === "blue") {
 			//for (let i = 0; i < this.bluePawns.length; i++) {
-			if ($('.square').hasClass('.red-pawn') && $('.square').data('x') === $(e.target).data('x') && $('.square').data('y') === $(e.target).data('y')) {
+			if ($('.square').children().hasClass('.blue-pawn') && $('.square').data('x') === $(e.target).data('x') && $('.square').data('y') === $(e.target).data('y')) {
 				//true means one of your pawns is there already
 				//(this.bluePawns[i] === $(e.target).data('x') && this.bluePawns[i] === $(e.target).data('y')) <-- didn't use arrrrayyyyy 
+				this.waitingforSquare = false;
 				return true;
 				//}
 			}
@@ -457,6 +463,7 @@ class Game {
 				}
 			}
 		}
+		console.log("Player selected card to play");
 	}
 	selectCurrentPawn(e) {
 		//WORKS
@@ -470,7 +477,7 @@ class Game {
 					this.waitingforCard = true;
 					this.waitingForPawn = false;
 				}
-			} else {
+			} else if ($(e.currentTarget).hasClass('blue-pawn')) {
 				if (this.whoseTurn === "blue") {
 					this.clickedPawnX = $(e.target).parent().data('x');
 					this.clickedPawnY = $(e.target).parent().data('y');
@@ -480,13 +487,12 @@ class Game {
 				}
 			}
 		}
+		console.log("Player clicked Pawn on selectCurrentPawn method");
 	}
-	//IDEAS On fixing this!!! I'm thinking I pull all the possible moves into an array, and then take that array and compare it. 
-	//if I click a div that its x and y coordinates DO NOT equal the combined amount of the current pawn's coordinates and the possible move, return false. 
 	isLegalMove(e) {
-		// console.log(this.cardClicked, " this is this.card.Clicked in isLegalMove");
-		// console.log(this.cardClicked.moves, " this is this.card.Clicked.moves in isLegalMove");
-		// console.log(this.cardClicked.moves[0]);
+		console.log(this.cardClicked, " this is this.card.Clicked in isLegalMove");
+		console.log(this.cardClicked.moves, " this is this.card.Clicked.moves in isLegalMove");
+		console.log(this.cardClicked.moves[0]);
 		let tempNewPawnPositionY = null;
 		let tempNewPawnPositionX = null;
 		if (this.whoseTurn === "red") {
@@ -547,10 +553,10 @@ class Game {
 				this.newPawnPositionX = $(e.target).data('x')
 				let currentPawnImage = this.currentPawn.detach();
 				$(e.target).append(currentPawnImage);
-				this.removeOpponentPawn(e);
+				//this.removeOpponentPawn(e); <<<<< Doesn't work
 				$('div').remove($('.current-pawn-container'));
 				$('img').removeClass('current-pawn');
-			}
+		}
 
 			this.victoryBlue();
 			this.victoryRed()
@@ -561,7 +567,7 @@ class Game {
 				this.newPawnPositionX = $(e.target).data('x')
 				let currentPawnImage = this.currentPawn.detach();
 				$(e.target).append(currentPawnImage);
-				this.removeOpponentPawn(e);
+			//	this.removeOpponentPawn(e); <<<< Doesn't work
 				$('div').remove($('.current-pawn-container'));
 				$('img').removeClass('current-pawn')
 			}
