@@ -351,24 +351,32 @@ class Game {
 		$('#bluecard2').attr('src', this.blueHand[1].img);
 		$('#side-card').attr('src', this.sideCard.img);
 	}
-	removeOpponentPawn(e) {
+	removeOpponentPawn() {
 		//TWO WAYS I can do this. 
 		//1. On player turn, any pawns with the class that's NOT the player's get removed. 
 		//If it's red's turn, and....
+
+		for(let i = 0; i <= 25; i++){
+			$('#i').each(function(){ 
+				$('.square').children().remove($('.blue-pawn')
+				});
+
+			}
+		}
 		if (this.whoseTurn === "red") {
 			//target square contains blue pawn, remove it!
 			//NEED IF STATEMENT TO CHECK IF BLUE PAWN IS THERE BEFORE REMOVAL
-			if ($(e.target).children().hasClass('blue-pawn')) {
+			if ($('.square').children().hasClass('red-pawn') && $('.square').children().hasClass('blue-pawn')) {
 				console.log("Is this what's happening?");
-				$(e.target).remove($('.blue-pawn'));
+				$('.square').children().remove($('.blue-pawn'));
 			}
 		}
 		//If it's blue's turn, and....
 		if (this.whoseTurn === "blue") {
 			//REPEAT DOWN BELOW
 			//target square contains red pawn, remove it!
-			if ($(e.target).children().hasClass('red-pawn')) {
-				$(e.target).remove($('.red-pawn'));
+			if ($('.square').children().hasClass('red-pawn') && $('.square').children().hasClass('blue-pawn')) {
+				$('.square').children().remove($('.red-pawn'));
 			}
 		}
 	}
@@ -556,7 +564,7 @@ class Game {
 				this.newPawnPositionX = $(e.target).data('x')
 				let currentPawnImage = this.currentPawn.detach();
 				$(e.target).append(currentPawnImage);
-				//this.removeOpponentPawn(e); <<<<< Doesn't work
+				this.removeOpponentPawn(); 
 				$('div').remove($('.current-pawn-container'));
 				$('img').removeClass('current-pawn');
 			}
@@ -570,7 +578,7 @@ class Game {
 				this.newPawnPositionX = $(e.target).data('x')
 				let currentPawnImage = this.currentPawn.detach();
 				$(e.target).append(currentPawnImage);
-			//	this.removeOpponentPawn(e); <<<< Doesn't work
+			this.removeOpponentPawn();
 				$('div').remove($('.current-pawn-container'));
 				$('img').removeClass('current-pawn')
 			}
@@ -598,4 +606,7 @@ $('.square').on('click', (e) => {
 })
 $('.pass').on('click', (e) => {
 	game.switchToOtherPlayer();
+})
+$('.reset-card-choice').on('click', (e) => {
+	game.waitingForCard = true;
 })
