@@ -12,7 +12,7 @@ const deck = [{
 		x: +1,
 		y: +1
 	}],
-	img: 'card-images/cobra.jpg'
+	img: 'card-images/Cobra.jpg'
 }, {
 	name: "Goose",
 	moves: [{
@@ -28,7 +28,7 @@ const deck = [{
 		x: +1,
 		y: -1
 	}],
-	img: 'card-images/goose.jpg'
+	img: 'card-images/Goose.jpg'
 }, {
 	name: "Elephant",
 	moves: [{
