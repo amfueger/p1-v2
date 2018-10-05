@@ -277,12 +277,13 @@ class Game {
 	// check if Stone is dead
 	victoryRed() {
 		if (this.whoseTurn === "red") {
-			//Stone is asking if the squares have no child elements with attributes of a class
-			if ($('.square').children().attr('blue-pawn-3') === false) {
-				//true is victory!
+			let pieceOnBlueHomeSquare = $("#3>img");
+			if (pieceOnBlueHomeSquare[0] && pieceOnBlueHomeSquare[0].id === "red-pawn-3") {
+				console.log("RED WINS!!!!!");
 				return true;
-				//stream
-			} else if ($('#3').attr('id', 'red-pawn-3')) {
+			}
+			if (!$("#blue-pawn-3").length) {
+				console.log("RED WINS!!!!!");
 				return true;
 			}
 			console.log("Red hasn't won yet, victory checked");
@@ -291,30 +292,29 @@ class Game {
 	}
 	victoryBlue() {
 		if (this.whoseTurn === "blue") {
-			//Stone is asking if the squares have no child elements with attributes of a class
-			if ($('.square').children().attr('red-pawn-3') === false) {
-				//true is victory!
-				console.log("Red has won!");
-				return true;
-				//stream
-			} else if ($('.square').data('x') === 3 && $('.square').data('y') === 1 && $('.square').children().hasClass('blue-pawn-3')) {
-				//true for victory!
-				//(this.bluePawns[2].x === 3 && this.bluePawns[2].y === 1) << since I didn't use pawn class
-				console.log("Blue has won!");
+			let pieceOnRedHomeSquare = $("#23>img");
+			if (pieceOnRedHomeSquare[0] && pieceOnRedHomeSquare[0].id === "blue-pawn-3") {
+				console.log("BLUE WINS!!!!!");
 				return true;
 			}
-			//no one has won yet!
-			console.log("Blue hasn't won yet, victory checked");
+			if (!$("#red-pawn-3").length) {
+				console.log("BLUE WINS!!!!!");
+				return true;
+			}
+			console.log("Red hasn't won yet, victory checked");
 			return false;
 		}
 	}
 	gameOver() {
-		if (this.victoryBlue === true) {
+		if (this.victoryBlue() === true) {
 			console.log("Blue has won!!!");
+			return true;
 		}
-		if (this.victoryRed === true) {
+		if (this.victoryRed() === true) {
 			console.log("Red has won!!!");
+			return true;
 		}
+		return false;
 	}
 	generatePawns(color, y) {
 		//WORKS
@@ -351,15 +351,15 @@ class Game {
 		//1. On player turn, any pawns with the class that's NOT the player's get removed. 
 		//If it's red's turn, and.... 
 		if (this.whoseTurn === "red") {
-			for(let i = 0; i <= 25; i++){
-				if($('#' + i ).children().hasClass('current-pawn') && $('#' + i ).children().hasClass('blue-pawn') === true){ 
+			for (let i = 0; i <= 25; i++) {
+				if ($('#' + i).children().hasClass('current-pawn') && $('#' + i).children().hasClass('blue-pawn') === true) {
 					$('#' + i).children('img.blue-pawn').remove()
 				};
 			}
 		}
 		if (this.whoseTurn === "blue") {
-			for(let i = 0; i <= 25; i++){
-				if($('#' + i ).children().hasClass('current-pawn') && $('#' + i ).children().hasClass('red-pawn') === true){ 
+			for (let i = 0; i <= 25; i++) {
+				if ($('#' + i).children().hasClass('current-pawn') && $('#' + i).children().hasClass('red-pawn') === true) {
 					$('#' + i).children('img.red-pawn').remove()
 				};
 			}
@@ -414,7 +414,6 @@ class Game {
 			this.clickedPawnX = null;
 			this.clickedPawnY = null;
 			this.cardClicked = "";
-			// this.currentDeck = []; ///?
 			this.currentPawn = null;
 			this.cardClickedIndex = null;
 			this.newPawnPositionY = null;
@@ -423,13 +422,11 @@ class Game {
 			$('.turn-text').text('It is Blues turn!')
 			$('.square').removeClass('current-pawn-container');
 			$('img').removeClass('current-pawn');
-
 		} else if (this.whoseTurn === "blue") {
 			this.whoseTurn = "red";
 			this.clickedPawnX = null;
 			this.clickedPawnY = null;
 			this.cardClicked = "";
-			// this.currentDeck = [];
 			this.currentPawn = null;
 			this.cardClickedIndex = null;
 			this.newPawnPositionY = null;
@@ -441,22 +438,23 @@ class Game {
 		}
 		this.waitingForPawn = true;
 	}
-	selectCurrentCard(e) { console.log("selectCurentCard");
+	selectCurrentCard(e) {
+		console.log("selectCurentCard");
 		//WORKS
 		if (this.waitingForCard === true) {
 			let itsRedCard = $(e.currentTarget).hasClass('red-cards');
 			if (itsRedCard) {
-				if (this.whoseTurn === "red") { console.log("red player tried to pick red card on reds turmn");
+				if (this.whoseTurn === "red") {
+					console.log("red player tried to pick red card on reds turmn");
 					this.cardClickedIndex = $(e.target).data('card');
-					console.log(this.cardClickedIndex)
 					this.cardClicked = this.redHand[this.cardClickedIndex];
 					this.waitingForCard = false;
 					this.waitingForSquare = true;
 				}
 			} else {
-				if (this.whoseTurn === "blue") { console.log("blue player tried to pick blue card on blues turmn");
+				if (this.whoseTurn === "blue") {
+					console.log("blue player tried to pick blue card on blues turmn");
 					this.cardClickedIndex = $(e.target).data('card');
-					console.log(this.cardClickedIndex)
 					this.cardClicked = this.blueHand[this.cardClickedIndex];
 					this.waitingForCard = false;
 					this.waitingForSquare = true;
@@ -467,17 +465,17 @@ class Game {
 	}
 	selectCurrentPawn(e) {
 		//WORKS
-		if (this.waitingForPawn === true) { console.log("we ran slect current pawn and got into first if (if waiting for pawn -=== true");
+		if (this.waitingForPawn === true) {
 			let itsRedPawn = $(e.currentTarget).hasClass('red-pawn');
 			if (itsRedPawn) {
-				if (this.whoseTurn === "red") { console.log("red player tried to pick a red pawn to move reds turmn");
+				if (this.whoseTurn === "red") {
 					this.clickedPawnX = $(e.target).parent().data('x'); //works
 					this.clickedPawnY = $(e.target).parent().data('y'); //works
 					this.currentPawn = $(e.target).parent().addClass('current-pawn-container').children('img').addClass('current-pawn');
 					this.waitingForCard = true;
 					this.waitingForPawn = false;
 				}
-			} else if ($(e.currentTarget).hasClass('blue-pawn')) { console.log("blue player tried to pick a blue pawn to move on  Blue's turn");
+			} else if ($(e.currentTarget).hasClass('blue-pawn')) {
 				if (this.whoseTurn === "blue") {
 					this.clickedPawnX = $(e.target).parent().data('x');
 					this.clickedPawnY = $(e.target).parent().data('y');
@@ -490,16 +488,10 @@ class Game {
 		console.log("Player clicked Pawn on selectCurrentPawn method");
 	}
 	isLegalMove(e) {
-		console.log(this.cardClicked, " this is this.card.Clicked in isLegalMove");
-		console.log(this.cardClicked.moves, " this is this.card.Clicked.moves in isLegalMove");
-		console.log(this.cardClicked.moves[0]);
 		let tempNewPawnPositionY = null;
 		let tempNewPawnPositionX = null;
 		if (this.whoseTurn === "red") {
-
 			for (let i = 0; i < this.cardClicked.moves.length; i++) {
-				//	console.log(this.cardClicked.moves[0].y + " testing card clicked move 1 y number");
-				//console.log(this.cardClicked.moves[i].y + " testing card clicked with i number");
 				tempNewPawnPositionY = this.cardClicked.moves[i].y + this.clickedPawnY; // set test Y val
 				tempNewPawnPositionX = this.cardClicked.moves[i].x + this.clickedPawnX; // set test X val
 				if (tempNewPawnPositionX === $(e.target).data('x') && tempNewPawnPositionY === $(e.target).data('y') && this.checkIfPawnOfColorIsThere(e) === false) {
@@ -532,7 +524,7 @@ class Game {
 				tempNewPawnPositionY = Number(bluePawnMovesY + this.clickedPawnY);
 				tempNewPawnPositionX = Number(bluePawnMovesX + this.clickedPawnX);
 				if (tempNewPawnPositionX === $(e.target).data('x') && tempNewPawnPositionY === $(e.target).data('y') && this.checkIfPawnOfColorIsThere(e) === false) {
-					console.log("You can click here");
+					console.log("move is valid- blue turn");
 					return true;
 				} //if
 			} //for
@@ -542,44 +534,50 @@ class Game {
 	} //finished
 	movePawn(e) {
 		if (this.whoseTurn === "red") {
-			//console.log(e + " test for event");
-			//console.log($(e.target).data('y') + "test for div y");
-			//console.log(this.cardClicked.moves[0].y + " testing cardclicked position 0 and its y");
-			// make sure this move legal according to the card
 			if (this.isLegalMove(e) === true) {
-				//console.log("move is legal according to the isLegalMove")
-				// console.log();
 				this.newPawnPositionY = $(e.target).data('y')
 				this.newPawnPositionX = $(e.target).data('x')
 				let currentPawnImage = this.currentPawn.detach();
 				$(e.target).append(currentPawnImage);
-				this.removeOpponentPawn(); 
+				this.removeOpponentPawn();
+				this.waitingForSquare = false;
+				if (this.gameOver()) {
+					this.waitingForPawn = false;
+					$('.turn-text').text('Game Over! Refresh page to play again!')
+				} else {
+					this.switchCards();
+					this.switchToOtherPlayer();
+				}
 			}
-			this.waitingForSquare = false;
-			this.victoryBlue();
-			this.victoryRed()
-			this.switchCards();
 		} else {
 			if (this.isLegalMove(e) === true) {
 				this.newPawnPositionY = $(e.target).data('y')
 				this.newPawnPositionX = $(e.target).data('x')
 				let currentPawnImage = this.currentPawn.detach();
 				$(e.target).append(currentPawnImage);
-			this.removeOpponentPawn();
+				this.removeOpponentPawn();
+				this.waitingForSquare = false;
+				if (this.gameOver()) {
+					this.waitingForPawn = false;
+					$('.turn-text').text('Game Over! Refresh page to play again!')
+				} else {
+					this.switchCards();
+					this.switchToOtherPlayer();
+				}
 			}
-			this.waitingForSquare = false;
-			this.victoryBlue();
-			this.victoryRed()
-			this.switchCards();
 		} //else
-		this.switchToOtherPlayer();
 	} //end of movePawn
 } //end of methods
 let game = new Game();
 game.gameSetup();
 /*****************Listeners************/
 $('.pawn').on('click', (e) => {
-	game.selectCurrentPawn(e);
+	if (game.waitingForSquare === true) {
+		e.target = e.target.parentElement;
+		game.movePawn(e);
+	} else {
+		game.selectCurrentPawn(e);
+	}
 });
 $('.cards').on('click', (e) => {
 	game.selectCurrentCard(e);

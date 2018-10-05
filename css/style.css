@@ -13,6 +13,15 @@
 	/*display: flex;*/
 
 }
+h1 {
+	font-size: 300px;
+	margin: 10px;
+	font-size: xx-large;
+	font-family: 'Sedgwick Ave', cursive;
+	color: blue;
+	text-shadow: 2px 2px black;
+	padding: 5px;
+}
 .left-side {
 	display: flex;
 	flex-direction: column;
@@ -72,15 +81,13 @@ h2 {
 	flex-direction: row;
 	height: 400px;
 }
-.side-card {
-	display: flex;
-	flex-direction: row;
-	height: 400px;
-}
+
 #side-card {
 	/*transform: rotate(90deg);*/
 	height: 200px;
 	width: 350px;
+	padding: 20px;
+	border-radius: 12px;
 	/*display: flex;
 	flex-direction: row;
 	justify-content: flex-end;
@@ -148,8 +155,6 @@ h2 {
 .button {
 	font-family: 'Roboto', sans-serif;
 
-
-
 }
 button {
 	padding: 20px;
@@ -160,4 +165,18 @@ button {
     width: -webkit-fill-available;
 }
 
+#red-pawn-3, #blue-pawn-3 {
+	width: 70px;
+	height: 100px;
+}
+
+#redcard1, #redcard2, #bluecard1, #bluecard2, #side-card {
+	width: 450px;
+	height: 275px;
+	border-radius: 12px;
+}
+
+.blue-sensei, .red-sensei {
+	border-radius: 15px;
+}
 
