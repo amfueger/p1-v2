@@ -353,17 +353,19 @@ class Game {
 		if (this.whoseTurn === "red") {
 			for (let i = 0; i <= 25; i++) {
 				if ($('#' + i).children().hasClass('current-pawn') && $('#' + i).children().hasClass('blue-pawn') === true) {
-					$('#' + i).children('img.blue-pawn').remove()
+					$('#' + i).children('blue-pawn').remove()
 				};
 			}
 		}
 		if (this.whoseTurn === "blue") {
 			for (let i = 0; i <= 25; i++) {
 				if ($('#' + i).children().hasClass('current-pawn') && $('#' + i).children().hasClass('red-pawn') === true) {
-					$('#' + i).children('img.red-pawn').remove()
+					$('#' + i).children('red-pawn').remove()
 				};
 			}
 		}
+
+				$('img').removeClass('current-pawn');
 	}
 	checkIfPawnOfColorIsThere(e) {
 		if (this.whoseTurn === "red") {
@@ -413,7 +415,7 @@ class Game {
 			this.whoseTurn = "blue";
 			this.clickedPawnX = null;
 			this.clickedPawnY = null;
-			this.cardClicked = "";
+			// this.cardClicked = "";
 			this.currentPawn = null;
 			this.cardClickedIndex = null;
 			this.newPawnPositionY = null;
@@ -426,7 +428,7 @@ class Game {
 			this.whoseTurn = "red";
 			this.clickedPawnX = null;
 			this.clickedPawnY = null;
-			this.cardClicked = "";
+			// this.cardClicked = "";
 			this.currentPawn = null;
 			this.cardClickedIndex = null;
 			this.newPawnPositionY = null;
@@ -437,12 +439,15 @@ class Game {
 			$('img').removeClass('current-pawn');
 		}
 		this.waitingForPawn = true;
+		this.waitingForSquare = false;
+		this.waitingForCard = false;
 	}
 	selectCurrentCard(e) {
 		console.log("selectCurentCard");
 		//WORKS
 		if (this.waitingForCard === true) {
 			let itsRedCard = $(e.currentTarget).hasClass('red-cards');
+			let itsBlueCard = $(e.currentTarget).hasClass('blue-cards');
 			if (itsRedCard) {
 				if (this.whoseTurn === "red") {
 					console.log("red player tried to pick red card on reds turmn");
@@ -451,7 +456,7 @@ class Game {
 					this.waitingForCard = false;
 					this.waitingForSquare = true;
 				}
-			} else {
+			} if (itsBlueCard){
 				if (this.whoseTurn === "blue") {
 					console.log("blue player tried to pick blue card on blues turmn");
 					this.cardClickedIndex = $(e.target).data('card');
@@ -532,40 +537,70 @@ class Game {
 			return false;
 		} //else
 	} //finished
-	movePawn(e) {
+movePawn(e) {
+		console.log("this.waitingforSquare beginning move pawn");
+		console.log("this.waitingforCard beginning move pawn");
+		console.log("this.waitingforPawn beginning move pawn");
+		console.log(this.waitingForSquare);
+		console.log(this.waitingForCard);
+		console.log(this.waitingForPawn);
 		if (this.whoseTurn === "red") {
+			console.log(e + " test for event");
+			console.log($(e.target).data('y') + "test for div y");
+			console.log(this.cardClicked.moves[0].y + " testing cardclicked position 0 and its y");
+			// make sure this move legal according to the card
+
+
+
+
 			if (this.isLegalMove(e) === true) {
+				console.log("move is legal according to the isLegalMove")
+				// console.log();
 				this.newPawnPositionY = $(e.target).data('y')
 				this.newPawnPositionX = $(e.target).data('x')
 				let currentPawnImage = this.currentPawn.detach();
 				$(e.target).append(currentPawnImage);
-				this.removeOpponentPawn();
-				this.waitingForSquare = false;
-				if (this.gameOver()) {
-					this.waitingForPawn = false;
-					$('.turn-text').text('Game Over! Refresh page to play again!')
-				} else {
-					this.switchCards();
-					this.switchToOtherPlayer();
-				}
+				
 			}
+		console.log(" RED this.waitingforSquare end move pawn, before victory, switch card/play");
+		console.log(" RED this.waitingforCard end move pawn, before victory, switch card/play");
+		console.log(" RED this.waitingforPawn end move pawn, before victory, switch card/play");
+		console.log(this.waitingForSquare);
+		console.log(this.waitingForCard);
+		console.log(this.waitingForPawn);
+			this.victoryBlue();
+			this.victoryRed()
+			this.switchCards();
 		} else {
+			
 			if (this.isLegalMove(e) === true) {
-				this.newPawnPositionY = $(e.target).data('y')
-				this.newPawnPositionX = $(e.target).data('x')
 				let currentPawnImage = this.currentPawn.detach();
 				$(e.target).append(currentPawnImage);
-				this.removeOpponentPawn();
-				this.waitingForSquare = false;
-				if (this.gameOver()) {
-					this.waitingForPawn = false;
-					$('.turn-text').text('Game Over! Refresh page to play again!')
-				} else {
-					this.switchCards();
-					this.switchToOtherPlayer();
-				}
+			
 			}
+		console.log(" BLUE this.waitingforSquare end move pawn, before victory, switch card/play");
+		console.log(" BLUE this.waitingforCard end move pawn, before victory, switch card/play");
+		console.log(" BLUE this.waitingforPawn end move pawn, before victory, switch card/play");
+		console.log(this.waitingForSquare);
+		console.log(this.waitingForCard);
+		console.log(this.waitingForPawn);
+			this.victoryBlue();
+			this.victoryRed()
+			this.switchCards();
+		console.log("this.waitingforSquare end move pawn, before switch play");
+		console.log("this.waitingforCard end move pawn, before switch play");
+		console.log("this.waitingforPawn end move pawn, before switch play");
+		console.log(this.waitingForSquare);
+		console.log(this.waitingForCard);
+		console.log(this.waitingForPawn);
 		} //else
+		this.switchToOtherPlayer();
+		console.log("this.waitingforSquare end move pawn, after switch");
+		console.log("this.waitingforCard end move pawn, after switch");
+		console.log("this.waitingforPawn end move pawn, after switch");
+		console.log(this.waitingForSquare);
+		console.log(this.waitingForCard);
+		console.log(this.waitingForPawn);
 	} //end of movePawn
 } //end of methods
 let game = new Game();
