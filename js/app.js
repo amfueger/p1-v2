@@ -243,8 +243,8 @@ class Pawn {
 		this.color = color;
 		this.pawnnumber = pawnnumber;
 		this.live = live;	
-		this.placement = this.choosePawnImgPlacement(x, y, color);
-		this.img = this.choosePawnImgId(i);
+		// this.placement = this.choosePawnImgPlacement(x, y, color);
+		// this.img = this.choosePawnImgId(i);
 	};
 	choosePawnImgId(i) {
 		this.img = $('</img>', {
@@ -261,11 +261,21 @@ class Pawn {
 		}
 	}
 }
+class Player {
+	constructor(color, isTurn, hand, pawns, clickedCard){
+		this.color = color;
+		this.isTurn = false;
+		this.hand = hand;
+		this.pawns = pawns;
+		this.clickedCard = null;
+
+	}
+}
 //Begin Game function
 class Game {
 	constructor() {
-		this.redHand = [];
-		this.blueHand = [];
+		this.redPlayer = null;
+		this.bluePlayer = null;
 		this.sideCard = {};
 		this.selectedCard = {}; //this is to hold the player's selected card after pawn select
 		this.whoseTurn = "red"; //true for red?
@@ -283,11 +293,70 @@ class Game {
 	}
 	gameSetup() {
 		//THIS WORKS
-		this.redPawns = this.generatePawns("red", 1);
-		this.bluePawns = this.generatePawns("blue", 5);
-		this.currentDeck = this.generateDeck(deck);
-		this.pushCardsintoHand(this.currentDeck);
+		//Generate player, and in player, generate pawns. 
+		this.redPlayer = this.generatePlayer("red");
+		this.bluePlayer = this.generatePlayer("blue");
+		this.sideCard = this.currentDeck[0]; 
+
+		
+		
 	}
+	//red is 1 for y, blue is 5 for y. 
+		generatePlayer(color, y) {
+			this.currentDeck = this.generateDeck(deck);
+			let hand = this.pushCardsintoHand(this.currentDeck);
+			let pawns = this.generatePawns(color, y);
+			if (color = "red") {
+				$('#redcard1').attr('src', this.hand[0].img);
+				$('#redcard2').attr('src', this.hand[1].img);
+			} 
+
+			if(color = "blue") {
+				$('#bluecard1').attr('src', this.blueHand[0].img);
+				$('#bluecard2').attr('src', this.blueHand[1].img);
+			}
+			//what am I pushing into the player: hand and pawns.
+		
+		//not sure what to do with this
+		$('#side-card').attr('src', this.sideCard.img);
+
+		}
+		generateDeck() {
+		//WORKS
+		let fullDeck = [];
+		fullDeck = deck.slice(0);
+		for (let i = 0; i <= 4; i++) {
+			this.currentDeck.push(fullDeck.splice(Math.floor(Math.random() * fullDeck.length), 1)[0]);
+		}
+		return this.currentDeck;
+	}
+		generatePawns(color, y) {
+		//WORKS
+		let pawns = [];
+		for (let i = 1; i < 6; i++) {
+			pawns.push(new Pawn(i, y, color, i, true, i));
+		};
+		return pawns;
+	}
+		pushCardsintoHand(currentDeck) {
+		//WORKS
+			let hand = this.currentDeck.splice(0,2);
+		
+		return hand;
+		}	
+		//
+		this.redHand.push(currentDeck[0]);
+		this.redHand.push(currentDeck[1]);
+		this.blueHand.push(currentDeck[2]);
+		this.blueHand.push(currentDeck[3]);
+		this.sideCard = currentDeck[4];
+		$('#redcard1').attr('src', this.redHand[0].img);
+		$('#redcard2').attr('src', this.redHand[1].img);
+		$('#bluecard1').attr('src', this.blueHand[0].img);
+		$('#bluecard2').attr('src', this.blueHand[1].img);
+		$('#side-card').attr('src', this.sideCard.img);
+	
+		
 	// check if Stone is dead
 	victoryRed() {
 		if (this.whoseTurn === "red") {
@@ -330,36 +399,9 @@ class Game {
 			console.log("Red has won!!!");
 		}
 	}
-	generatePawns(color, y) {
-		//WORKS
-		let pawns = [];
-		for (let i = 1; i < 6; i++) {
-			pawns.push(new Pawn(i, y, color, i, true, i));
-		};
-		return pawns;
-	}
-	generateDeck() {
-		//WORKS
-		let fullDeck = [];
-		fullDeck = deck.slice(0);
-		for (let i = 0; i <= 4; i++) {
-			this.currentDeck.push(fullDeck.splice(Math.floor(Math.random() * fullDeck.length), 1)[0]);
-		}
-		return this.currentDeck;
-	}
-	pushCardsintoHand(currentDeck) {
-		//WORKS
-		this.redHand.push(currentDeck[0]);
-		this.redHand.push(currentDeck[1]);
-		this.blueHand.push(currentDeck[2]);
-		this.blueHand.push(currentDeck[3]);
-		this.sideCard = currentDeck[4];
-		$('#redcard1').attr('src', this.redHand[0].img);
-		$('#redcard2').attr('src', this.redHand[1].img);
-		$('#bluecard1').attr('src', this.blueHand[0].img);
-		$('#bluecard2').attr('src', this.blueHand[1].img);
-		$('#side-card').attr('src', this.sideCard.img);
-	}
+
+
+
 	removeOpponentPawn(e) {
 		//TWO WAYS I can do this. 
 		//1. On player turn, any pawns with the class that's NOT the player's get removed. 
